@@ -1,4 +1,6 @@
+import re
 from bs4 import BeautifulSoup
+
 
 ITEM_HTML = '''<html><head></head><body>
 <li class="col-xs-6 col-sm-4 col-md-3 col-lg-3">
@@ -44,5 +46,14 @@ def find_item_link():
     item_name = item_link.attrs['href']
     print(item_name)
 
+def find_item_price():
+    locator = 'article.product_pod p.price_color'
+    item_price = soup.select_one(locator).string
+    pattern = '£([0-9]+\.[0-9]+)'
+    matcher = re.search(pattern, item_price)
+    print(matcher.group(0))
+    print(float(matcher.group(1)))
+
 find_item_name()
 find_item_link()
+find_item_price()
