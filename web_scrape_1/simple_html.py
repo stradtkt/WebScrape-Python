@@ -1,0 +1,21 @@
+SIMPLE_HTML = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SIMPLE_HTML</title>
+</head>
+<body>
+    <h1>This is the title</h1>
+    <p class="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque dolore doloremque hic magnam, nam nostrum perferendis qui tempora vel vero.</p>
+    <p>Here is another p tag without a class</p>
+    <ul>
+        <li>Derek</li>
+        <li>Adam</li>
+        <li>Debra</li>
+        <li>Kevin</li>
+        <li>Patrick</li>
+    </ul>
+</body>
+</html>
+'''
