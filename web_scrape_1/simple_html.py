@@ -1,3 +1,5 @@
+from bs4 import BeautifulSoup
+
 SIMPLE_HTML = '''
 <!DOCTYPE html>
 <html lang="en">
@@ -19,3 +21,29 @@ SIMPLE_HTML = '''
 </body>
 </html>
 '''
+
+simple_soup = BeautifulSoup(SIMPLE_HTML, 'html.parser')
+
+def find_title():
+    h1_tag = simple_soup.find('h1')
+    print(h1_tag.string)
+
+
+def find_list_items():
+    list_items = simple_soup.find_all('li')
+    list_contents = [e.string for e in list_items]
+    print(list_contents)
+
+def find_subtitle():
+    p = simple_soup.find('p', {'class': 'subtitle'})
+    print(p.string)
+
+def find_other_p():
+    p = simple_soup.find_all('p')
+    other_p = [i for i in p if 'subtitle' not in i.attrs.get('class', [])]
+    print(other_p[0].string)
+
+find_title()
+find_list_items()
+find_subtitle()
+find_other_p()
