@@ -31,29 +31,47 @@ ITEM_HTML = '''<html><head></head><body>
 </body></html>
 '''
 
-soup = BeautifulSoup(ITEM_HTML, 'html.parser')
-
-def find_item_name():
-    locator = 'article.product_pod h3 a'
-    item_link = soup.select_one(locator)
-    item_name = item_link.attrs['title']
-    print(item_name)
+class ParsedItemLocators:
+    NAME_LOCATOR = 'article.product_pod h3 a'
+    LINK_LOCATOR = 'article.product_pod h3 a'
+    PRICE_LOCATOR = 'article.product_pod p.price_color'
+    RATING_LOCATOR = 'article.product_pod p.star-rating'
 
 
-def find_item_link():
-    locator = 'article.product_pod h3 a'
-    item_link = soup.select_one(locator)
-    item_name = item_link.attrs['href']
-    print(item_name)
+class ParsedItem:
+    def __init__(self, page):
+        self.soup = BeautifulSoup(page, 'html.parser')
 
-def find_item_price():
-    locator = 'article.product_pod p.price_color'
-    item_price = soup.select_one(locator).string
-    pattern = '£([0-9]+\.[0-9]+)'
-    matcher = re.search(pattern, item_price)
-    print(matcher.group(0))
-    print(float(matcher.group(1)))
+    @property
+    def name(self):
+        locator = ParsedItemLocators.NAME_LOCATOR
+        item_link = self.soup.select_one(locator)
+        item_name = item_link.attrs['title']
+        return item_name
 
-find_item_name()
-find_item_link()
-find_item_price()
+    @property
+    def link(self):
+        locator = ParsedItemLocators.LINK_LOCATOR
+        item_link = self.soup.select_one(locator)
+        item_name = item_link.attrs['href']
+        return item_name
+
+    @property
+    def price(self):
+        locator = ParsedItemLocators.PRICE_LOCATOR
+        item_price = self.soup.select_one(locator).string
+        pattern = '£([0-9]+\.[0-9]+)'
+        matcher = re.search(pattern, item_price)
+        return float(matcher.group(1))
+
+    @property
+    def rating(self):
+        locator = ParsedItemLocators.RATING_LOCATOR
+        star_rating_tag = self.soup.select_one(locator)
+        classes = star_rating_tag.attrs['class']
+        rating_classes = [r for r in classes if r != 'star-rating']
+        return rating_classes[0]
+
+item = ParsedItem(ITEM_HTML)
+print(item.rating)
+print(item.name)
